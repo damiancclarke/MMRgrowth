@@ -10,7 +10,7 @@ It requires the following data sources:
   > BL2013_F_v2.0.dta: Barro-Lee education data (female)
   > BL2013_M_v2.0.dta: Barro-Lee education data (male)
   > MM_Base          : WHO MMR database
-
+  > WB_*             : World Bank Databank controls
 
 */
 
@@ -87,21 +87,22 @@ do  "$COD/WHO_Countrynaming.do"
 rename countryname country
 
 merge m:m country year using "$DAT/MMRgrowth.dta", gen(_merge`var')
-save "$DAT/MMReduc_BASE_F", replace
+save "$DAT/MMRgrowth", replace
 
 ********************************************************************************
 *** (5) Variable creation
-********************************************************************************
-exit
-    
-gen ln_yrsch  = log(yr_sch)
+********************************************************************************    
 gen ln_MMR    = log(MMR)
 gen ln_GDPpc  = log(GDPpc)
+
+lab var TeenBirths "Births per 1000 women aged 15-19" 
+lab var GDPgrowth  "Rate of GDP growth"
+lab var IMR        "Infant mortality rate (deaths per 100,000 live births)"
 
 ********************************************************************************
 *** (6) Save, clean
 ********************************************************************************
-lab dat "Education and Maternal Mortality by country 1990-2010 (Bhalotra Clarke)"
-save "$DAT/MMReduc_BASE_F", replace
+lab dat "MMR and economic growth by country 1990-2010 (Bhalotra Clarke)"
+save "$DAT/MMRgrowth", replace
 
 log close
