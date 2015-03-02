@@ -38,6 +38,9 @@ foreach var of varlist lu lp lpc ls lsc lh lhc yr_sch yr_sch_* {
 }
 keep M_*  country year agefrom ageto 
 merge 1:1 country year agefrom ageto using "$DAT/BL2013_F_v2.0.dta", gen(_mMF)
+foreach var of varlist lu lp lpc ls lsc lh lhc yr_sch yr_sch_* {
+    rename `var' F_`var'
+}
 drop _mMF
 
 rename agefrom AF
