@@ -66,7 +66,7 @@ save "$DAT/MMRgrowth.dta", replace
 ********************************************************************************
 *** (4) Merge Barro-Lee with GDP, other controls
 ********************************************************************************
-local fl GDPpc Immunization fertility population TeenBirths IMR GDPgrowth
+local fl Immunization GDPpc fertility population TeenBirths IMR GDPgrowth
 
 foreach var of local fl {
     use "$DAT/WB_`var'", clear
@@ -79,6 +79,8 @@ foreach var of local fl {
 
     rename countryname country
     merge m:m country year using "$DAT/MMRgrowth.dta", gen(_merge`var')
+    cap drop if _mergeIMR==1
+    cap drop if _mergeGDPgrowth==1
     save "$DAT/MMRgrowth.dta", replace
 }
 
@@ -86,7 +88,7 @@ use "$DAT/WB_birthphysician", clear
 do  "$COD/WHO_Countrynaming.do"
 rename countryname country
 
-merge m:m country year using "$DAT/MMRgrowth.dta", gen(_merge`var')
+merge m:m country year using "$DAT/MMRgrowth.dta", gen(_mergebirthphysician)
 save "$DAT/MMRgrowth", replace
 
 ********************************************************************************
